@@ -1,13 +1,13 @@
 /*
  * @Author: zi.yang
  * @Date: 2020-07-27 21:43:49
- * @LastEditTime: 2020-07-27 23:13:54
+ * @LastEditTime: 2020-07-28 00:28:54
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \ToyReact\src\ToyReact.js
  */
 
-class ElementWarpper {
+class ElementWrapper {
   constructor(type) {
     this.root = document.createElement(type);
   }
@@ -22,7 +22,7 @@ class ElementWarpper {
   }
 }
 
-class TextWarpper {
+class TextWrapper {
   constructor(content) {
     this.root = document.createTextNode(content);
   }
@@ -30,8 +30,10 @@ class TextWarpper {
     parent.appendChild(this.root);
   }
 }
-
-exports.Component = class Component {
+class Component {
+  constructor() {
+    this.children = [];
+  }
   setAttribute(name, value) {
     this[name] = value;
   }
@@ -39,20 +41,39 @@ exports.Component = class Component {
     let vdom = this.render();
     vdom.mountTo(parent);
   }
+  appendChild(vchild) {
+    this.children.push(vchild);
+  }
 };
 
-exports.ToyReact = {
+const ToyReact = {
   createElement(type, attributes, ...children) {
     let element =
-      typeof type === "string" ? new ElementWarpper(type) : new type();
+      typeof type === "string" ? new ElementWrapper(type) : new type();
 
     for (let name in attributes) {
       element.setAttribute(name, attributes[name]);
     }
-    for (let child of children) {
-      child = typeof child === "string" && new TextWarpper(child);
-      element.appendChild(child);
-    }
+    const insertChildren = (children) => {
+      for (let child of children) {
+        if (typeof child === "object" && child instanceof Array) {
+          insertChildren(child);
+        } else {
+          if (
+            !(child instanceof Component) &&
+            !(child instanceof ElementWrapper) &&
+            !(child instanceof TextWrapper)
+          ) {
+            child = String(child);
+          }
+          if (typeof child === "string") {
+            child = new TextWrapper(child);
+          }
+          element.appendChild(child);
+        }
+      }
+    };
+    insertChildren(children);
     return element;
   },
 
@@ -61,3 +82,6 @@ exports.ToyReact = {
     // element.appendChild(vdom)
   },
 };
+
+exports.ToyReact = ToyReact;
+exports.Component = Component;
