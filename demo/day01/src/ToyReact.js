@@ -1,10 +1,10 @@
 /*
  * @Author: zi.yang
  * @Date: 2020-07-27 21:43:49
- * @LastEditTime: 2020-07-28 00:32:46
+ * @LastEditTime: 2020-07-28 14:16:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
- * @FilePath: \ToyReact\src\ToyReact.js
+ * @FilePath: \ToyReact\demo\day01\src\ToyReact.js
  */
 
 class ElementWrapper {
@@ -48,14 +48,24 @@ class Component {
 
 const ToyReact = {
   createElement(type, attributes, ...children) {
+    /**
+     * 创建元素：
+     *    如果传入的是字符串，即HTML类型，则调用 ElementWrapper 创建元素
+     *    如果传入的不是字符串，则是自定义的 jsx 组件对象，则直接 new 对象
+     */
     let element =
       typeof type === "string" ? new ElementWrapper(type) : new type();
-
+    
+    // 设置元素属性
     for (let name in attributes) {
       element.setAttribute(name, attributes[name]);
     }
+    
+    // 插入子元素
     const insertChildren = (children) => {
+      //递归查询子元素，插入子元素
       for (let child of children) {
+        // 判断是否是对象,
         if (typeof child === "object" && child instanceof Array) {
           insertChildren(child);
         } else {
