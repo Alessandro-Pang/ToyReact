@@ -1,10 +1,10 @@
 /*
  * @Author: zi.yang
  * @Date: 2020-07-27 21:43:49
- * @LastEditTime: 2020-07-29 08:57:28
+ * @LastEditTime: 2020-07-29 23:37:23
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
- * @FilePath: \ToyReact\src\ToyReact.js
+ * @FilePath: \ToyReact\demo\day02\src\ToyReact.js
  */
 
 class ElementWrapper {
@@ -30,12 +30,12 @@ class ElementWrapper {
   }
   appendChild(vchild) {
     const range = document.createRange();
-    if(this.root.children.length){
+    if (this.root.children.length) {
       range.setStartAfter(this.root.lastChild);
       range.setEndAfter(this.root.lastChild);
-    }else{
-      range.setStart(this.root,0);
-      range.setEnd(this.root,0)
+    } else {
+      range.setStart(this.root, 0);
+      range.setEnd(this.root, 0);
     }
 
     vchild.mountTo(range);
@@ -52,12 +52,13 @@ class TextWrapper {
   }
   mountTo(range) {
     range.deleteContents();
-    range.insertNode(this.root)
+    range.insertNode(this.root);
   }
 }
 class Component {
   constructor() {
     this.children = [];
+    this.comment = false;
     this.props = Object.create(null);
   }
   setAttribute(name, value) {
@@ -73,16 +74,20 @@ class Component {
     this.children.push(vchild);
   }
   update() {
-    //占位符，确保删除元素后 range 没有变化
-    const placholder = document.createComment("placholder");
-    //创建一个 Range 对象，接口表示一个包含节点与文本节点的一部分的文档片段。
-    const range = document.createRange(); 
-    // endContainer 返回包含 Range 终点的节点。
-    // endOffset 返回一个表示 Range 终点在 endContainer 中的位置的数字。
-    range.setStart(this.range.endContainer, this.range.endOffset);
-    range.setEnd(this.range.endContainer, this.range.endOffset);
-    // 插入占位符
-    range.insertNode(placholder);
+    // 处理 Range 节点修复
+    if (!this.comment) {
+      //占位符，确保删除元素后 range 没有变化
+      const placholder = document.createComment("placholder");
+      //创建一个 Range 对象，接口表示一个包含节点与文本节点的一部分的文档片段。
+      const range = document.createRange();
+      // endContainer 返回包含 Range 终点的节点。
+      // endOffset 返回一个表示 Range 终点在 endContainer 中的位置的数字。
+      range.setStart(this.range.endContainer, this.range.endOffset);
+      range.setEnd(this.range.endContainer, this.range.endOffset);
+      // 插入占位符
+      range.insertNode(placholder);
+      this.comment = true;
+    }
     // 删除原有内容
     this.range.deleteContents();
     // 渲染新的 DOM
@@ -90,7 +95,7 @@ class Component {
     vdom.mountTo(this.range);
 
     // 目前不能删除，会影响DOM渲染
-    // placholder.parentNode.removeChild(placeholder)
+    // placholder.parentNode.removeChild(placholder);
   }
   setState(state) {
     // merge 合并新状态

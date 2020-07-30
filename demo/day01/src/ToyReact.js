@@ -6,30 +6,49 @@
  * @Description: In User Settings Edit
  * @FilePath: \ToyReact\demo\day01\src\ToyReact.js
  */
-
+/**
+ * 元素实例封装
+ */
 class ElementWrapper {
   constructor(type) {
+  	// 创建 DOM 元素
     this.root = document.createElement(type);
   }
+  
+  // 封装设置属性方法
   setAttribute(name, value) {
     this.root.setAttribute(name, value);
   }
+
+  // 封装插入虚拟DOM方法
   appendChild(vchild) {
     vchild.mountTo(this.root);
   }
+
+  // 封装插入DOM元素方法
   mountTo(parent) {
     parent.appendChild(this.root);
   }
 }
 
+/**
+ * 文本实例封装
+ */
 class TextWrapper {
   constructor(content) {
+  	// 将文本转换成 文本节点，用于appndChild
     this.root = document.createTextNode(content);
   }
+
+  // 封装插入DOM元素方法
   mountTo(parent) {
     parent.appendChild(this.root);
   }
 }
+
+/**
+ * 自定义组件实体类
+ */
 class Component {
   constructor() {
     this.children = [];
@@ -53,11 +72,12 @@ const ToyReact = {
      *    如果传入的是字符串，即HTML类型，则调用 ElementWrapper 创建元素
      *    如果传入的不是字符串，则是自定义的 jsx 组件对象，则直接 new 对象
      */
-    let element =
+    const element =
       typeof type === "string" ? new ElementWrapper(type) : new type();
     
     // 设置元素属性
     for (let name in attributes) {
+      // 调用 Component 类中 SetAttribute 方法
       element.setAttribute(name, attributes[name]);
     }
     
