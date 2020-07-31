@@ -1,7 +1,7 @@
 /*
  * @Author: zi.yang
  * @Date: 2020-07-27 21:43:49
- * @LastEditTime: 2020-07-30 08:58:50
+ * @LastEditTime: 2020-07-31 09:04:19
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \ToyReact\src\ToyReact.js
@@ -242,9 +242,8 @@ class Component {
 
 const ToyReact = {
   createElement(type, attributes, ...children) {
-    let element =
-      typeof type === "string" ? new ElementWrapper(type) : new type();
-
+    let element = typeof type === "string" ? new ElementWrapper(type) : new type();
+    
     for (let name in attributes) {
       element.setAttribute(name, attributes[name]);
     }

@@ -107,3 +107,12 @@ document.body.appendChild(component);
 * 所以自定义的 ToyReact.createElement 也必须有三个参数，用于生成 DOM 元素。
 * 因为是真实DOM元素，所以 ToyReact 中可以直接通过 DOM 的方法去处理，合成元素。 
 * 因为 Babel 会将所有的 JSX 编译成 JS 所以这里可以直接插入子元素，从而不需要递归查询
+
+## 运行代码
+
+``` shell
+# 1. 安装依赖项
+npm install
+# 2. 运行代码
+npm run dev
+```

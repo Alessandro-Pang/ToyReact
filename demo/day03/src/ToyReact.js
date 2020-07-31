@@ -1,10 +1,10 @@
 /*
  * @Author: zi.yang
  * @Date: 2020-07-27 21:43:49
- * @LastEditTime: 2020-07-30 08:58:50
+ * @LastEditTime: 2020-07-30 14:41:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
- * @FilePath: \ToyReact\src\ToyReact.js
+ * @FilePath: \ToyReact\demo\day03\src\ToyReact.js
  */
 
 class ElementWrapper {
