@@ -1,7 +1,7 @@
 /*
  * @Author: zi.yang
  * @Date: 2020-07-27 21:43:49
- * @LastEditTime: 2020-07-28 14:16:42
+ * @LastEditTime: 2020-08-03 09:05:41
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \ToyReact\demo\day01\src\ToyReact.js
@@ -53,11 +53,13 @@ class Component {
   constructor() {
     this.children = [];
   }
+  
+  // 给自定义组件加入属性
   setAttribute(name, value) {
     this[name] = value;
   }
   mountTo(parent) {
-    let vdom = this.render();
+    const vdom = this.render();
     vdom.mountTo(parent);
   }
   appendChild(vchild) {
@@ -74,13 +76,13 @@ const ToyReact = {
      */
     const element =
       typeof type === "string" ? new ElementWrapper(type) : new type();
-    
+
     // 设置元素属性
     for (let name in attributes) {
       // 调用 Component 类中 SetAttribute 方法
       element.setAttribute(name, attributes[name]);
     }
-    
+
     // 插入子元素
     const insertChildren = (children) => {
       //递归查询子元素，插入子元素
@@ -94,6 +96,11 @@ const ToyReact = {
             !(child instanceof ElementWrapper) &&
             !(child instanceof TextWrapper)
           ) {
+            /**
+             * 安全检查：
+             *  将非法属性、类型通过 toString 转换成 字符串
+             *  如：boolean、function、string 等
+             */
             child = String(child);
           }
           if (typeof child === "string") {
@@ -108,6 +115,7 @@ const ToyReact = {
   },
 
   render(vdom, element) {
+    // Component
     vdom.mountTo(element);
     // element.appendChild(vdom)
   },

@@ -24,7 +24,7 @@
 
 ### 0. Component 自定义组件类
 
-> Component 组件类封装了生命周期，Dom渲染等一系列操作
+> Component 组件类封装了自定义组件的生命周期，Dom渲染等一系列操作
 >
 > 当组件继承了 Component 时，会同时继承他的方法与生命周期 
 
@@ -124,7 +124,62 @@ class Component{
 
 ### 1. ElementWrapper 与 TextWrapper 类 
 
+> Document 中，有 元素节点 和 文本节点 两种基本类型
+>
+> 所以通过 ElementWrapper 和 TextWrapper 转换成相应的节点插入DOM
 
+* ElementWrapper 的实现
+
+```js
+class ElementWrapper {
+  constructor(type) {
+  	// 创建 DOM 元素
+    this.root = document.createElement(type);
+  }
+  
+  // 封装设置属性方法
+  setAttribute(name, value) {
+    this.root.setAttribute(name, value);
+  }
+
+  // 封装插入虚拟DOM方法
+  appendChild(vchild) {
+    vchild.mountTo(this.root);
+  }
+
+  // 封装插入DOM元素方法
+  mountTo(parent) {
+    // this.root == parent
+    parent.appendChild(this.root);
+  }
+}
+```
+
+* TextWrapper 的实现
+
+```js
+class TextWrapper {
+  constructor(content) {
+  	// 将文本转换成 文本节点，用于appndChild
+    this.root = document.createTextNode(content);
+  }
+
+  // 封装插入DOM元素方法
+  mountTo(parent) {
+    parent.appendChild(this.root);
+  }
+}
+```
+
+### 2. Component 、ElementWrapper  、 TextWrapper  的关系
+
+> 这里令人迷惑的地方就是他们三者之间的关系，或者说是 Component 与二者的关系
+>
+> ToyReact 中 Component 类 其实与 二者是并列关系，他们都是 JSX(Dom 节点) 元素组件的实现类 
+>
+> 1. Component 用于处理 自定义元素组件
+> 2. ElementWrapper 用于处理HTML元素组件
+> 3. TextWrapper 用于处理 Text 文本的组件  
 
 ## 运行代码
 

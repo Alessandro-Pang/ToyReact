@@ -1,15 +1,16 @@
 /*
  * @Author: zi.yang
  * @Date: 2020-07-27 21:23:05
- * @LastEditTime: 2020-07-28 00:30:26
+ * @LastEditTime: 2020-08-03 08:40:35
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
- * @FilePath: \ToyReact\index.js
+ * @FilePath: \ToyReact\demo\day01\index.jsx
  */
 
 const { ToyReact, Component } = require("@/ToyReact");
 
 class MyComponent extends Component {
+  // 在这里可以调用 Component 方法
   render() {
     return (
       <div>
@@ -26,7 +27,7 @@ class MyComponent extends Component {
 const component = (
   <MyComponent name="myComponet" id="test">
     <MyComponent>
-      <div>Hi, i am the child components</div>
+      <div zy="1" name="div">Hi, i am the child components</div>
     </MyComponent>
   </MyComponent>
 );

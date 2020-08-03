@@ -1,7 +1,7 @@
 /*
  * @Author: zi.yang
  * @Date: 2020-07-27 21:43:49
- * @LastEditTime: 2020-07-31 09:04:19
+ * @LastEditTime: 2020-08-03 08:01:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \ToyReact\src\ToyReact.js
@@ -93,6 +93,9 @@ class Component {
   constructor() {
     this.children = [];
     this.props = Object.create(null);
+  }
+  echo(){
+    console.log("echo")
   }
   // 获取 type
   get type() {
