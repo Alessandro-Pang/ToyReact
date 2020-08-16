@@ -179,7 +179,80 @@ class TextWrapper {
 >
 > 1. Component 用于处理 自定义元素组件
 > 2. ElementWrapper 用于处理HTML元素组件
-> 3. TextWrapper 用于处理 Text 文本的组件  
+> 3. TextWrapper 用于处理 Text 文本的组件
+
+### 3. ToyReact 对象
+
+```js
+const ToyReact = {
+  createElement(type, attributes, ...children) {
+    /**
+     * 创建元素：
+     *    如果传入的是字符串，即HTML类型，则调用 ElementWrapper 创建元素
+     *    如果传入的不是字符串，则是自定义的 jsx 组件对象，则直接 new 对象
+     */
+    const element =
+      typeof type === "string" ? new ElementWrapper(type) : new type();
+	
+    /**
+     * type == 'div'
+     * new ElementWrapper('div')
+     *
+     * type == MyComponent
+     * new MyComponent()
+     */
+      
+    // 设置元素属性
+    for (let name in attributes) {
+      // 调用 Component 类中 SetAttribute 方法
+      element.setAttribute(name, attributes[name]);
+    }
+
+    // 插入子元素
+    const insertChildren = (children) => {
+      //递归查询子元素，插入子元素
+      for (let child of children) {
+        // 判断是否是对象,并且对象来自数组
+        if (typeof child === "object" && child instanceof Array) {
+           // 满足条件,我们判定他是自定义组件,递归执行
+          insertChildren(child);
+        } else {
+          if (
+            !(child instanceof Component) &&
+            !(child instanceof ElementWrapper) &&
+            !(child instanceof TextWrapper)
+          ) {
+            /**
+             * 安全检查：
+             *  将非法属性、类型通过 toString 转换成 字符串
+             *  如：boolean、function、string 等
+             */
+            child = String(child);
+          }
+          // 如果是一个字符串，我们将它转化为 文本节点
+          if (typeof child === "string") {
+            child = new TextWrapper(child);
+          }
+          /**
+           * 通过ElementWarpper 中的appendChild 方法插入子元素
+           * 这时的节点只有 文本节点 和 DOM 节点
+           */
+          element.appendChild(child);
+        }
+      }
+    };
+    insertChildren(children);
+    return element;
+  },
+
+  render(vdom, element) {
+    vdom.mountTo(element);
+  },
+};
+```
+
+* 根据 JSX 规则最外层必须是被单个Dom(VDom)元素包裹，所以在 我们可以直接通过 `typeof type`来判断是否是DOM类型，如果传入的不是一个字符串，而是一个类、对象，那么我们就认为他是我们的自定义组件，从而通过new递归调用
+* insertChildren 方法是封装了插入虚拟DOM的方法，当 child 元素中，还有子元素时，就会递归调用。当他不是自定义组件，同时不是 文本节点和元素节点，则认定为非法元素，处理成文本节点。
 
 ## 运行代码
 
