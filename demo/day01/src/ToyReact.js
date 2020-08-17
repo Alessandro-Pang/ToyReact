@@ -68,7 +68,7 @@ const ToyReact = {
          */
         const element =
             typeof type === "string" ? new ElementWrapper(type) : new type();
-
+            
         // 设置元素属性
         for (let name in attributes) {
             // 调用 Component、ElementWrapper 类中 SetAttribute 方法

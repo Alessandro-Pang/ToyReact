@@ -1,13 +1,3 @@
-<!--
-
- * @Author: zi.yang
- * @Date: 2020-07-28 08:25:54
- * @LastEditTime: 2020-07-28 13:47:05
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \ToyReact\demo\day01\README.md
--->
-
 # Day 01 介绍
 
 ## 本篇概述

@@ -1,10 +1,9 @@
-/*
- * @Author: zi.yang
- * @Date: 2020-07-27 21:43:49
- * @LastEditTime: 2020-07-29 23:37:23
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \ToyReact\demo\day02\src\ToyReact.js
+/**
+ * @ Author: zy.yang
+ * @ Create Time: 2020-07-27 21:43:49
+ * @ Modified by: zi.yang
+ * @ Modified time: 2020-08-17 08:56:11
+ * @ Description:
  */
 
 class ElementWrapper {
@@ -17,8 +16,8 @@ class ElementWrapper {
       this.root.setAttribute("class", value);
       return;
     }
-    // 捕获自定义事件
-    if (name.match(/^on([A-Z]([a-z]+))$/)) {
+    // 捕获自定义事件: onClick onMouseMove
+    if (name.match(/^on([A-Z]([A-Za-z]+))$/)) {
       // 修正事件名称
       const eventName = RegExp.$1.replace(/^[A-Z]/, (e) => e.toLowerCase());
       // 添加DOM事件监听
@@ -62,7 +61,9 @@ class Component {
     this.props = Object.create(null);
   }
   setAttribute(name, value) {
+    // 处理父级元素传入的属性
     this.props[name] = value;
+    // 处理元素属性
     this[name] = value;
   }
   mountTo(range) {

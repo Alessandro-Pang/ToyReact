@@ -1,10 +1,9 @@
-/*
- * @Author: zi.yang
- * @Date: 2020-07-27 21:23:05
- * @LastEditTime: 2020-07-29 08:58:40
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: \ToyReact\index.jsx
+/**
+ * @ Author: zy.yang
+ * @ Create Time: 2020-08-07 08:24:42
+ * @ Modified by: zi.yang
+ * @ Modified time: 2020-08-17 07:45:43
+ * @ Description:
  */
 require('./css/index.css');
 const { ToyReact, Component } = require("@/ToyReact");
