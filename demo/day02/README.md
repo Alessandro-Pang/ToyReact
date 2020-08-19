@@ -35,7 +35,56 @@ range.setEnd(endNode,endOffset);
 /* Range 的具体方法、属性，因篇幅过长，所以放在末尾 */
 ```
 
-## Component 对象重写
+## ElementWrapper 类重构
+
+在 setAttribute 方法中对元素事件、属性进行处理和监听，在 appendChild 方法中使用 Range 对象重构。
+
+```JS
+class ElementWrapper {
+  constructor(type) {
+    this.root = document.createElement(type);
+  }
+  setAttribute(name, value) {
+    // 处理 className , 修正为 class
+    if (name === "className") {
+      this.root.setAttribute("class", value);
+      return;
+    }
+    // 捕获自定义事件: onClick onMouseMove
+    if (name.match(/^on([A-Z]([A-Za-z]+))$/)) {
+      // 修正事件名称
+      const eventName = RegExp.$1.replace(/^[A-Z]/, (e) => e.toLowerCase());
+      // 添加DOM事件监听
+      this.root.addEventListener(eventName, value);
+      return;
+    }
+    // 添加属性
+    this.root.setAttribute(name, value);
+  }
+  appendChild(vchild) {
+    const range = document.createRange();
+    if (this.root.children.length) {
+      range.setStartAfter(this.root.lastChild);
+      range.setEndAfter(this.root.lastChild);
+    } else {
+      range.setStart(this.root, 0);
+      range.setEnd(this.root, 0);
+    }
+
+    vchild.mountTo(range);
+  }
+  mountTo(range) {
+    range.deleteContents();
+    range.insertNode(this.root);
+  }
+}
+```
+
+* 将 className 处理成 class 并将其设置为元素属性
+* 通过正则表达式捕获元素事件，其中命名方式为驼峰命名法，onClick、onMouseMove
+* 不属于 class 和 事件的，我们将其认定为自定义属性。
+
+## Component 类重构
 
 ```js
 class Component {
